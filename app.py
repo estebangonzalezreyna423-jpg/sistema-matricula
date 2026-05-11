@@ -1430,6 +1430,26 @@ def logout():
     session.clear()
     return redirect("/")
 
+@app.route("/reset_boletas")
+def reset_boletas():
+
+    conn = get_db()
+    cur = conn.cursor()
+
+    cur.execute("DELETE FROM boletas")
+    cur.execute("DELETE FROM boleta_detalles")
+
+    cur.execute("""
+        UPDATE pagos
+        SET estado='Pendiente',
+            fecha_pago=NULL,
+            boleta_id=NULL
+    """)
+
+    conn.commit()
+    conn.close()
+
+    return "Boletas eliminadas correctamente"
 
 if __name__ == "__main__":
     app.run(debug=True)
