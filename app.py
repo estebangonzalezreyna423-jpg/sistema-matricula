@@ -1436,20 +1436,29 @@ def reset_boletas():
     conn = get_db()
     cur = conn.cursor()
 
-    cur.execute("DELETE FROM boletas")
-    cur.execute("DELETE FROM boleta_detalles")
+    try:
+        cur.execute("DELETE FROM boleta_detalles")
+    except:
+        pass
 
-    cur.execute("""
-        UPDATE pagos
-        SET estado='Pendiente',
-            fecha_pago=NULL,
-            boleta_id=NULL
-    """)
+    try:
+        cur.execute("DELETE FROM boletas")
+    except:
+        pass
+
+    try:
+        cur.execute("""
+            UPDATE pagos
+            SET estado='Pendiente',
+                fecha_pago=NULL
+        """)
+    except:
+        pass
 
     conn.commit()
     conn.close()
 
-    return "Boletas eliminadas correctamente"
+    return "Boletas reiniciadas correctamente 😎"
 
 if __name__ == "__main__":
     app.run(debug=True)
