@@ -94,7 +94,7 @@ def init_db():
         pass
 
     try:
-        cur.execute("ALTER TABLE matriculas ADD COLUMN descuento TEXT")
+        cur.execute("ALTER TABLE usuarios ADD COLUMN rol TEXT DEFAULT 'secretaria'")
     except:
         pass
 
