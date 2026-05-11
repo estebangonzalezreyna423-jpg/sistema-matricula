@@ -94,6 +94,11 @@ def init_db():
         pass
 
     try:
+        cur.execute("ALTER TABLE matriculas ADD COLUMN descuento TEXT")
+    except:
+        pass
+
+    try:
         cur.execute("ALTER TABLE usuarios ADD COLUMN rol TEXT DEFAULT 'secretaria'")
     except:
         pass
@@ -102,6 +107,22 @@ def init_db():
         cur.execute("ALTER TABLE pagos ADD COLUMN fecha_vencimiento TEXT")
     except:
         pass
+
+    cur.execute("""
+    CREATE TABLE IF NOT EXISTS boletas (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        numero_boleta TEXT,
+        alumno_id INTEGER,
+        pago_id INTEGER,
+        concepto TEXT,
+        monto_recibido REAL,
+        metodo_pago TEXT,
+        fecha_pago_real TEXT,
+        fecha_confirmacion TEXT,
+        fecha_registro TEXT,
+        observacion TEXT
+    )
+    """)
 
     cur.execute("""
     CREATE TABLE IF NOT EXISTS boleta_detalles (
@@ -181,14 +202,20 @@ def dashboard():
     cur.execute("SELECT COUNT(*) FROM pagos WHERE estado='Pagado'")
     pagos_pagados = cur.fetchone()[0]
 
-    cur.execute("SELECT SUM(monto_recibido) FROM boletas")
-    total_recaudado = cur.fetchone()[0] or 0
+    try:
+        cur.execute("SELECT SUM(monto_recibido) FROM boletas")
+        total_recaudado = cur.fetchone()[0] or 0
+    except:
+        total_recaudado = 0
 
     cur.execute("SELECT SUM(monto) FROM pagos WHERE estado='Pendiente'")
     total_pendiente = cur.fetchone()[0] or 0
 
-    cur.execute("SELECT COUNT(*) FROM boletas")
-    total_boletas = cur.fetchone()[0]
+    try:
+        cur.execute("SELECT COUNT(*) FROM boletas")
+        total_boletas = cur.fetchone()[0]
+    except:
+        total_boletas = 0
 
     cur.execute("""
         SELECT COUNT(DISTINCT alumno_id)
@@ -401,7 +428,7 @@ def matricular_alumno(alumno_id):
                 cur.execute("""
                     INSERT INTO pagos
                     (alumno_id, concepto, monto, estado, fecha_vencimiento)
-                    VALUES (?, ?, ?, ?)
+                    VALUES (?, ?, ?, ?, ?)
                 """, (
                     alumno_id,
                     concepto,
@@ -485,12 +512,15 @@ def ver_pagos(alumno_id):
     """, (alumno_id,))
     pendiente = cur.fetchone()[0] or 0
 
-    cur.execute("""
-        SELECT SUM(monto_recibido)
-        FROM boletas
-        WHERE alumno_id=?
-    """, (alumno_id,))
-    pagado = cur.fetchone()[0] or 0
+    try:
+        cur.execute("""
+            SELECT SUM(monto_recibido)
+            FROM boletas
+            WHERE alumno_id=?
+        """, (alumno_id,))
+        pagado = cur.fetchone()[0] or 0
+    except:
+        pagado = 0
 
     total = pendiente + pagado
 
@@ -693,6 +723,10 @@ def boleta(boleta_id):
     """, (boleta_id,))
 
     boleta = cur.fetchone()
+
+    if not boleta:
+        conn.close()
+        return redirect("/boletas")
 
     alumno_id = boleta[13]
     pago_id = boleta[14]
@@ -1322,8 +1356,11 @@ def detalle_alumno(alumno_id):
     cur.execute("SELECT SUM(monto) FROM pagos WHERE alumno_id=?", (alumno_id,))
     pendiente = cur.fetchone()[0] or 0
 
-    cur.execute("SELECT SUM(monto_recibido) FROM boletas WHERE alumno_id=?", (alumno_id,))
-    pagado = cur.fetchone()[0] or 0
+    try:
+        cur.execute("SELECT SUM(monto_recibido) FROM boletas WHERE alumno_id=?", (alumno_id,))
+        pagado = cur.fetchone()[0] or 0
+    except:
+        pagado = 0
 
     total = pendiente + pagado
 
