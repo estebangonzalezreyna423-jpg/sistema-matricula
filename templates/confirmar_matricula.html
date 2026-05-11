@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Confirmar matrícula</title>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+
+<div class="sidebar">
+    <h2>📘 Matrícula</h2>
+    <a href="/dashboard">Inicio</a>
+    <a href="/alumnos">Gestión de alumnos</a>
+    <a href="/matricula">Matrícula</a>
+    <a href="/deudores">Deudores</a>
+    <a href="/logout">Cerrar sesión</a>
+</div>
+
+<div class="content">
+
+<div class="card form-card">
+
+<a class="btn-volver" href="/matricula">⬅ Volver</a>
+
+<h1>Confirmar matrícula</h1>
+
+<p><b>Alumno:</b> {{ alumno[1] }} {{ alumno[2] }}</p>
+<p><b>Grado:</b> {{ alumno[4] }}° {{ alumno[5] }}</p>
+
+<form class="form-editar" method="POST">
+
+    <div>
+        <label>Monto de matrícula</label>
+        <input type="number" step="0.01" name="monto_matricula" value="350.00" required>
+    </div>
+
+    <div>
+        <label>Pensión mensual</label>
+        <input type="number" step="0.01" name="monto_pension" value="400.00" required>
+    </div>
+
+    <div>
+        <label>Descuento / motivo</label>
+        <select name="descuento">
+            <option value="Sin descuento">Sin descuento</option>
+            <option value="Familiar">Familiar</option>
+            <option value="Beca">Beca</option>
+            <option value="Primer puesto">Primer puesto</option>
+            <option value="Segundo puesto">Segundo puesto</option>
+            <option value="Otro">Otro</option>
+        </select>
+    </div>
+
+    <button class="btn-full" type="submit">Confirmar matrícula</button>
+
+</form>
+
+</div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Editar alumno</title>
+
+<link rel="stylesheet" href="/static/style.css">
+
+</head>
+
+<body>
+
+<div class="sidebar">
+    <h2>📘 Matrícula</h2>
+    <a href="/dashboard">Inicio</a>
+    <a href="/alumnos">Gestión de alumnos</a>
+    <a href="/matricula">Matrícula</a>
+    <a href="/deudores">Deudores</a>
+    <a href="/logout">Cerrar sesión</a>
+</div>
+
+<div class="content">
+
+<div class="card form-card">
+
+<a class="btn-volver" href="/alumnos">⬅ Volver</a>
+
+<h1>Editar alumno</h1>
+
+<form class="form-editar" method="POST">
+
+    <div>
+        <label>Nombres</label>
+        <input type="text" name="nombres" value="{{ alumno[1] }}" required>
+    </div>
+
+    <div>
+        <label>Apellidos</label>
+        <input type="text" name="apellidos" value="{{ alumno[2] }}" required>
+    </div>
+
+    <div>
+        <label>DNI</label>
+        <input type="text" name="dni" value="{{ alumno[3] }}" placeholder="Ingrese DNI">
+    </div>
+
+    <div>
+        <label>Grado</label>
+        <select name="grado" required>
+            <option value="1" {% if alumno[4] == '1' %}selected{% endif %}>1°</option>
+            <option value="2" {% if alumno[4] == '2' %}selected{% endif %}>2°</option>
+            <option value="3" {% if alumno[4] == '3' %}selected{% endif %}>3°</option>
+            <option value="4" {% if alumno[4] == '4' %}selected{% endif %}>4°</option>
+            <option value="5" {% if alumno[4] == '5' %}selected{% endif %}>5°</option>
+        </select>
+    </div>
+
+    <div>
+        <label>Sección</label>
+        <select name="seccion" required>
+            <option value="A" {% if alumno[5] == 'A' %}selected{% endif %}>A</option>
+            <option value="B" {% if alumno[5] == 'B' %}selected{% endif %}>B</option>
+            <option value="C" {% if alumno[5] == 'C' %}selected{% endif %}>C</option>
+        </select>
+    </div>
+
+    <div>
+        <label>Apoderado</label>
+        <input type="text" name="apoderado" value="{{ alumno[6] if alumno[6] else '' }}" placeholder="Nombre del apoderado">
+    </div>
+
+    <div>
+        <label>Teléfono</label>
+        <input type="text" name="telefono" value="{{ alumno[7] if alumno[7] else '' }}" placeholder="Número de contacto">
+    </div>
+
+    <div>
+        <label>Estado</label>
+        <select name="estado">
+            <option value="Activo" {% if alumno[8] == 'Activo' %}selected{% endif %}>Activo</option>
+            <option value="Retirado" {% if alumno[8] == 'Retirado' %}selected{% endif %}>Retirado</option>
+        </select>
+    </div>
+
+    <button class="btn-full" type="submit">Guardar cambios</button>
+
+</form>
+
+</div>
+
+</div>
+
+</body>
+</html>

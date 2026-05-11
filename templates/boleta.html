@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Boleta de pago</title>
+<link rel="stylesheet" href="/static/style.css">
+
+<style>
+.boleta {
+    max-width: 900px;
+    margin: 20px auto;
+    background: white;
+    padding: 30px;
+    border: 3px solid #1e3a8a;
+    color: #0f172a;
+}
+
+.boleta-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    border-bottom: 3px solid #1e3a8a;
+    padding-bottom: 15px;
+}
+
+.boleta-titulo h1 {
+    margin: 0;
+    color: #1e3a8a;
+    font-size: 34px;
+}
+
+.boleta-titulo p {
+    margin: 4px 0;
+    font-weight: bold;
+}
+
+.boleta-numero {
+    border: 3px solid #1e3a8a;
+    padding: 15px 25px;
+    text-align: center;
+    border-radius: 10px;
+}
+
+.boleta-numero h2 {
+    margin: 0;
+    color: #1e3a8a;
+}
+
+.boleta-datos {
+    margin: 20px 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px 30px;
+}
+
+.boleta-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.boleta-table th {
+    background: #1e3a8a;
+    color: white;
+    padding: 12px;
+    border: 1px solid #1e3a8a;
+}
+
+.boleta-table td {
+    padding: 12px;
+    border: 1px solid #1e3a8a;
+}
+
+.boleta-total {
+    margin-top: 20px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.boleta-total div {
+    border: 3px solid #1e3a8a;
+    padding: 15px 30px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.boleta-estado {
+    text-align: center;
+    margin-top: 25px;
+    font-size: 24px;
+    font-weight: bold;
+    color: #1e3a8a;
+}
+
+.btn-group {
+    max-width: 900px;
+    margin: 20px auto;
+    display: flex;
+    gap: 10px;
+}
+
+@media print {
+    .btn-group {
+        display: none;
+    }
+
+    body {
+        background: white;
+    }
+
+    .boleta {
+        margin: 0;
+        box-shadow: none;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="boleta">
+
+    <div class="boleta-top">
+        <div class="boleta-titulo">
+            <h1>Institución Educativa Cepas</h1>
+            <p>BOLETA DE PAGO ESCOLAR</p>
+            <p>Sistema de matrícula y pensiones</p>
+        </div>
+
+        <div class="boleta-numero">
+            <h2>BOLETA</h2>
+            <p>N° {{ boleta[1] }}</p>
+        </div>
+    </div>
+
+    <div class="boleta-datos">
+        <p><b>Alumno:</b> {{ boleta[9] }} {{ boleta[10] }}</p>
+        <p><b>Grado:</b> {{ boleta[11] }}° {{ boleta[12] }}</p>
+        <p><b>Concepto:</b> {{ pago_actual[0] }}</p>
+        <p><b>Método:</b> {{ boleta[4] }}</p>
+        <p><b>Fecha de pago:</b> {{ boleta[5] }}</p>
+        <p><b>Fecha confirmación:</b> {{ boleta[6] }}</p>
+    </div>
+
+    <table class="boleta-table">
+        <tr>
+            <th>N°</th>
+            <th>Descripción</th>
+            <th>Método</th>
+            <th>Fecha pago</th>
+            <th>Fecha confirmación</th>
+            <th>Importe</th>
+        </tr>
+
+        {% for h in historial %}
+        <tr>
+            <td>{{ loop.index }}</td>
+            <td>{{ h[5] if h[5] else 'Abono de ' ~ pago_actual[0] }}</td>
+            <td>{{ h[2] }}</td>
+            <td>{{ h[3] }}</td>
+            <td>{{ h[4] }}</td>
+            <td>S/ {{ h[1] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <div class="boleta-total">
+        <div>Total pagado: S/ {{ total_pagado }}</div>
+    </div>
+
+    <p><b>Monto total del concepto:</b> S/ {{ total_concepto }}</p>
+    <p><b>Pendiente:</b> S/ {{ pendiente }}</p>
+    <p><b>Observación:</b> {{ boleta[8] }}</p>
+
+    <div class="boleta-estado">
+        {% if pendiente == 0 %}
+            CANCELADO
+        {% else %}
+            PENDIENTE
+        {% endif %}
+    </div>
+
+</div>
+
+<div class="btn-group">
+    <a class="btn btn-primary" href="javascript:window.print()">Imprimir</a>
+    <a class="btn-limpiar" href="/pagos/{{ alumno_id }}">Volver a pagos</a>
+</div>
+
+</body>
+</html>

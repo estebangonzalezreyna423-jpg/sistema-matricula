@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Deudores</title>
+<link rel="stylesheet" href="/static/style.css">
+
+<style>
+.filtro-box {
+    display: none;
+    margin-top: 15px;
+}
+
+.filtro-box.active {
+    display: block;
+}
+
+.btn-excel {
+    background: #16a34a;
+    color: white;
+    padding: 10px 16px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: bold;
+    border: none;
+    display: inline-block;
+}
+
+.btn-excel:hover {
+    background: #15803d;
+}
+</style>
+
+<script>
+function toggleFiltro() {
+    document.getElementById("filtros").classList.toggle("active");
+}
+</script>
+
+</head>
+
+<body>
+
+<div class="sidebar">
+    <h2>Matrícula</h2>
+    <a href="/dashboard">Inicio</a>
+    <a href="/alumnos">Gestión de alumnos</a>
+    <a href="/matricula">Matrícula</a>
+    <a href="/deudores">Deudores</a>
+    <a href="/boletas">Historial de boletas</a>
+    <a href="/logout">Cerrar sesión</a>
+</div>
+
+<div class="content">
+
+<h1>Alumnos con deuda</h1>
+
+<div style="display:flex; gap:10px; margin-bottom:15px; align-items:center;">
+
+    <a href="/descargar_deudores_excel?buscar={{ request.args.get('buscar','') }}&mes={{ request.args.get('mes','') }}&grado={{ request.args.get('grado','') }}&seccion={{ request.args.get('seccion','') }}" class="btn-excel">
+        Descargar Excel
+    </a>
+
+    <button onclick="toggleFiltro()">Filtros</button>
+
+</div>
+
+<div id="filtros" class="filtro-box">
+
+<form class="form-buscar" method="GET">
+
+    <input type="text" name="buscar" placeholder="Nombre o DNI">
+
+    <select name="mes">
+        <option value="">Mes</option>
+        <option value="Matrícula">Matrícula</option>
+        <option value="Agenda">Agenda</option>
+        <option value="Cuota de ingreso">Cuota ingreso</option>
+        <option value="Marzo">Marzo</option>
+        <option value="Abril">Abril</option>
+        <option value="Mayo">Mayo</option>
+        <option value="Junio">Junio</option>
+        <option value="Julio">Julio</option>
+        <option value="Agosto">Agosto</option>
+        <option value="Septiembre">Septiembre</option>
+        <option value="Octubre">Octubre</option>
+        <option value="Noviembre">Noviembre</option>
+        <option value="Diciembre">Diciembre</option>
+    </select>
+
+    <select name="grado">
+        <option value="">Grado</option>
+        <option value="1">1°</option>
+        <option value="2">2°</option>
+        <option value="3">3°</option>
+        <option value="4">4°</option>
+        <option value="5">5°</option>
+    </select>
+
+    <select name="seccion">
+        <option value="">Sección</option>
+        <option value="A">A</option>
+        <option value="B">B</option>
+        <option value="C">C</option>
+    </select>
+
+    <button type="submit">Aplicar</button>
+    <a class="btn-limpiar" href="/deudores">Limpiar</a>
+
+</form>
+
+</div>
+
+<div class="card">
+<div class="table-container">
+
+<table>
+<tr>
+    <th>Alumno</th>
+    <th>Grado</th>
+    <th>Sección</th>
+    <th>Pagos pendientes</th>
+    <th>Total deuda</th>
+    <th>Acción</th>
+</tr>
+
+{% for d in deudores %}
+<tr>
+    <td>{{ d[1] }} {{ d[2] }}</td>
+    <td>{{ d[3] }}°</td>
+    <td>{{ d[4] }}</td>
+    <td><span class="badge-pendiente">{{ d[5] }}</span></td>
+    <td>S/ {{ d[6] }}</td>
+    <td>
+        <a class="btn btn-primary" href="/pagos/{{ d[0] }}">Ver pagos</a>
+    </td>
+</tr>
+{% else %}
+<tr>
+    <td class="vacio" colspan="6">No hay resultados</td>
+</tr>
+{% endfor %}
+
+</table>
+
+</div>
+</div>
+
+</div>
+
+</body>
+</html>

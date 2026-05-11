@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Historial de boletas</title>
+<link rel="stylesheet" href="/static/style.css">
+
+<style>
+.btn-excel {
+    background: #16a34a;
+    color: white;
+    padding: 10px 16px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: bold;
+    display: inline-block;
+}
+
+.btn-excel:hover {
+    background: #15803d;
+}
+</style>
+</head>
+
+<body>
+
+<div class="sidebar">
+    <h2>Matrícula</h2>
+    <a href="/dashboard">Inicio</a>
+    <a href="/alumnos">Gestión de alumnos</a>
+    <a href="/matricula">Matrícula</a>
+    <a href="/deudores">Deudores</a>
+    <a href="/boletas">Historial de boletas</a>
+    <a href="/logout">Cerrar sesión</a>
+</div>
+
+<div class="content">
+
+<h1>Historial de boletas por alumno</h1>
+
+<div style="display:flex; gap:10px; margin-bottom:15px; align-items:center;">
+
+    <a class="btn-excel" href="/descargar_boletas_excel">
+         Descargar Excel
+    </a>
+
+</div>
+
+<form class="form-buscar" method="GET" style="margin-bottom:15px;">
+
+    <input 
+        type="text"
+        name="buscar"
+        placeholder="Buscar alumno o número de boleta"
+        value="{{ buscar }}"
+    >
+
+    <button type="submit">
+        Buscar
+    </button>
+
+    <a class="btn-limpiar" href="/boletas">
+        Limpiar
+    </a>
+
+</form>
+
+<div class="card">
+<div class="table-container">
+
+<table>
+
+<tr>
+    <th>Alumno</th>
+    <th>Grado</th>
+    <th>Sección</th>
+    <th>Acción</th>
+</tr>
+
+{% for a in alumnos %}
+<tr>
+
+    <td>{{ a[1] }} {{ a[2] }}</td>
+
+    <td>{{ a[3] }}°</td>
+
+    <td>{{ a[4] }}</td>
+
+    <td>
+        <a class="btn btn-primary" href="/boletas_alumno/{{ a[0] }}">
+            Ver historial
+        </a>
+    </td>
+
+</tr>
+
+{% else %}
+
+<tr>
+    <td class="vacio" colspan="4">
+        No se encontraron alumnos con boletas
+    </td>
+</tr>
+
+{% endfor %}
+
+</table>
+
+</div>
+</div>
+
+</div>
+
+</body>
+</html>

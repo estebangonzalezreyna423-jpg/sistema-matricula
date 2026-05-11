@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Detalle del alumno</title>
+
+<link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+
+<div class="sidebar">
+    <h2>Matrícula</h2>
+    <a href="/dashboard">Inicio</a>
+    <a href="/alumnos">Gestión de alumnos</a>
+    <a href="/matricula">Matrícula</a>
+    <a href="/deudores">Deudores</a>
+    <a href="/logout">Cerrar sesión</a>
+</div>
+
+<div class="content">
+
+<a class="btn-volver" href="/alumnos">⬅ Volver</a>
+
+<div class="card">
+    <h1>{{ alumno[1] }} {{ alumno[2] }}</h1>
+    <p><b>Grado:</b> {{ alumno[4] }}° {{ alumno[5] }}</p>
+    <p><b>Estado:</b> <span class="estado">{{ alumno[8] }}</span></p>
+</div>
+
+<div class="resumen">
+    <div class="resumen-card total">
+        <span>Total</span>
+        <strong>S/ {{ total }}</strong>
+    </div>
+
+    <div class="resumen-card pagado">
+        <span>Pagado</span>
+        <strong>S/ {{ pagado }}</strong>
+    </div>
+
+    <div class="resumen-card pendiente">
+        <span>Pendiente</span>
+        <strong>S/ {{ pendiente }}</strong>
+    </div>
+</div>
+
+<div class="card">
+    <h2>Pagos</h2>
+
+    <div class="table-container">
+        <table>
+            <tr>
+                <th>Concepto</th>
+                <th>Monto</th>
+                <th>Estado</th>
+                <th>Fecha</th>
+                <th>Acción</th>
+            </tr>
+
+            {% for p in pagos %}
+            <tr>
+                <td>{{ p[0] }}</td>
+                <td>S/ {{ p[1] }}</td>
+                <td>
+                    {% if p[2] == 'Pagado' %}
+                        <span class="badge-pagado">Pagado</span>
+                    {% else %}
+                        <span class="badge-pendiente">Pendiente</span>
+                    {% endif %}
+                </td>
+
+                <td>{{ p[3] if p[3] else "-" }}</td>
+
+                <td>
+    		    {% if p[2] == 'Pagado' %}
+                        {% if p[4] %}
+            		    <a class="btn btn-primary" href="/boleta/{{ p[4] }}">Ver boleta</a>
+        	        {% else %}
+                            <span class="btn-disabled">Sin boleta</span>>
+        	        {% endif %}
+                    {% else %}
+                        <span class="badge-pendiente">Pendiente</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td class="vacio" colspan="5">No hay pagos registrados.</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+
+</div>
+
+</body>
+</html>

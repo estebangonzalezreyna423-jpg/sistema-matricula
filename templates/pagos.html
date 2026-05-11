@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Pagos</title>
+
+<link rel="stylesheet" href="/static/style.css">
+
+</head>
+
+<body>
+
+<div class="sidebar">
+    <h2>Matrícula</h2>
+    <a href="/dashboard">Inicio</a>
+    <a href="/alumnos">Gestión de alumnos</a>
+    <a href="/matricula">Matrícula</a>
+    <a href="/deudores">Deudores</a>
+    <a href="/boletas">Historial de boletas</a>
+    <a href="/logout">Cerrar sesión</a>
+</div>
+
+<div class="content">
+
+<h1>Pagos de {{ alumno[1] }} {{ alumno[2] }}</h1>
+
+<div style="display:flex; gap:10px; margin-bottom:20px;">
+
+    <a class="btn-volver" href="/matricula">
+        ⬅ Volver
+    </a>
+
+</div>
+
+<div class="resumen">
+
+    <div class="resumen-card total">
+        <span>Total</span>
+        <strong>S/ {{ total }}</strong>
+    </div>
+
+    <div class="resumen-card pagado">
+        <span>Pagado</span>
+        <strong>S/ {{ pagado }}</strong>
+    </div>
+
+    <div class="resumen-card pendiente">
+        <span>Pendiente</span>
+        <strong>S/ {{ pendiente }}</strong>
+    </div>
+
+</div>
+
+<form class="form-buscar" method="GET" style="margin-bottom:15px;">
+
+    <input 
+        type="text"
+        name="buscar"
+        placeholder="Buscar concepto: Marzo, Abril, Matrícula..."
+        value="{{ buscar }}"
+    >
+
+    <select name="estado">
+        <option value="">Todos</option>
+
+        <option value="Pendiente" {% if estado == 'Pendiente' %}selected{% endif %}>
+            Pendiente
+        </option>
+
+        <option value="Pagado" {% if estado == 'Pagado' %}selected{% endif %}>
+            Pagado
+        </option>
+    </select>
+
+    <button type="submit">
+        Buscar
+    </button>
+
+    <a class="btn-limpiar" href="/pagos/{{ alumno[0] }}">
+        Limpiar
+    </a>
+
+</form>
+
+<div class="card">
+
+<div class="table-container">
+
+<table>
+
+<tr>
+    <th>Concepto</th>
+    <th>Monto</th>
+    <th>Estado</th>
+    <th>Fecha</th>
+    <th>Acción</th>
+</tr>
+
+{% for p in pagos %}
+<tr>
+
+<td>{{ p[1] }}</td>
+
+<td>S/ {{ p[2] }}</td>
+
+<td>
+{% if p[3] == 'Pagado' %}
+    <span class="badge-pagado">Pagado</span>
+{% else %}
+    <span class="badge-pendiente">Pendiente</span>
+{% endif %}
+</td>
+
+<td>
+    {{ p[4] if p[4] else "-" }}
+</td>
+
+<td>
+
+{% if p[3] == 'Pendiente' %}
+
+    <a class="btn btn-success" href="/pagar/{{ p[0] }}">
+        Registrar pago
+    </a>
+
+{% else %}
+
+    {% if p[5] %}
+
+        <a class="btn btn-primary" href="/boleta/{{ p[5] }}">
+            Ver boleta
+        </a>
+
+    {% else %}
+
+        <span class="check">✔ Pagado</span>
+
+    {% endif %}
+
+{% endif %}
+
+</td>
+
+</tr>
+
+{% else %}
+
+<tr>
+    <td class="vacio" colspan="5">
+        No se encontraron pagos con ese filtro
+    </td>
+</tr>
+
+{% endfor %}
+
+</table>
+
+</div>
+
+</div>
+
+</div>
+
+</body>
+</html>

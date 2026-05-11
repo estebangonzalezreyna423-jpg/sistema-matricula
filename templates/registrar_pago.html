@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Registrar pago</title>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+
+<div class="sidebar">
+    <h2>Matrícula</h2>
+    <a href="/dashboard">Inicio</a>
+    <a href="/alumnos">Gestión de alumnos</a>
+    <a href="/matricula">Matrícula</a>
+    <a href="/deudores">Deudores</a>
+    <a href="/logout">Cerrar sesión</a>
+</div>
+
+<div class="content">
+
+<div class="card form-card">
+
+<a class="btn-volver" href="/pagos/{{ pago[1] }}">⬅ Volver</a>
+
+<h1>Registrar pago</h1>
+
+<p><b>Alumno:</b> {{ pago[5] }} {{ pago[6] }}</p>
+<p><b>Concepto:</b> {{ pago[2] }}</p>
+<p><b>Monto pendiente:</b> S/ {{ pago[3] }}</p>
+
+<form class="form-editar" method="POST">
+
+    <!-- NÚMERO BOLETA -->
+    <div>
+        <label>Número de boleta</label>
+        <input type="text"
+               name="numero_boleta"
+               placeholder="Ejemplo: 0001-025"
+               required>
+    </div>
+
+    <!-- MONTO -->
+    <div>
+        <label>Monto recibido</label>
+        <input type="number"
+               step="0.01"
+               name="monto_recibido"
+               required>
+    </div>
+
+    <!-- MÉTODO -->
+    <div>
+        <label>Método de pago</label>
+        <select name="metodo_pago" required>
+            <option value="Efectivo">Efectivo</option>
+            <option value="Yape">Yape</option>
+            <option value="Plin">Plin</option>
+            <option value="Transferencia">Transferencia</option>
+            <option value="Depósito">Depósito</option>
+        </select>
+    </div>
+
+    <!-- FECHA PAGO -->
+    <div>
+        <label>Fecha del pago</label>
+        <input type="date"
+               name="fecha_pago_real"
+               required>
+    </div>
+
+    <!-- FECHA CONFIRMACIÓN -->
+    <div>
+        <label>Fecha de confirmación</label>
+        <input type="date"
+               name="fecha_confirmacion"
+               required>
+    </div>
+
+    <!-- OBSERVACIÓN -->
+    <div style="grid-column: span 2;">
+        <label>Observación</label>
+        <input type="text"
+               name="observacion"
+               placeholder="Ejemplo: pago confirmado por voucher">
+    </div>
+
+    <button class="btn-full" type="submit">
+        Registrar pago
+    </button>
+
+</form>
+
+</div>
+
+</div>
+
+</body>
+</html>

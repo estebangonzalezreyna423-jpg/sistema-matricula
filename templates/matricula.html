@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Matrícula - Sistema de Matrícula</title>
+
+<link rel="stylesheet" href="/static/style.css">
+
+</head>
+
+<body>
+
+<div class="sidebar">
+    <h2>Matrícula</h2>
+    <a href="/dashboard">Inicio</a>
+    <a href="/alumnos">Gestión de alumnos</a>
+    <a href="/matricula">Matrícula</a>
+    <a href="/deudores">Deudores</a>
+    <a href="/boletas">Historial de boletas</a>
+    <a href="/logout">Cerrar sesión</a>
+</div>
+
+<div class="content">
+    <div class="card">
+        <h1>Módulo de Matrícula</h1>
+        <p>Busca un alumno, verifica su estado y realiza la matrícula.</p>
+
+        <form class="form-buscar" method="GET">
+            <input type="text" name="buscar" placeholder="Buscar alumno...">
+
+            <select name="grado">
+                <option value="">Grado</option>
+                <option value="1">1°</option>
+                <option value="2">2°</option>
+                <option value="3">3°</option>
+                <option value="4">4°</option>
+                <option value="5">5°</option>
+            </select>
+
+            <select name="seccion">
+                <option value="">Sección</option>
+                <option value="A">A</option>
+                <option value="B">B</option>
+                <option value="C">C</option>
+            </select>
+
+            <button type="submit">Filtrar</button>
+            <a class="btn-limpiar" href="/matricula">Limpiar</a>
+        </form>
+
+        <div class="table-container">
+            <table>
+                <tr>
+                    <th>ID</th>
+                    <th>Alumno</th>
+                    <th>Grado</th>
+                    <th>Sección</th>
+                    <th>Matriculado</th>
+                    <th>Acción</th>
+                </tr>
+
+                {% for alumno in alumnos %}
+                <tr>
+                    <td>{{ alumno[0] }}</td>
+                    <td>{{ alumno[1] }} {{ alumno[2] }}</td>
+                    <td>{{ alumno[3] }}°</td>
+                    <td>{{ alumno[4] }}</td>
+                    <td>
+                        {% if alumno[5] == 'Sí' %}
+                            <span class="badge-si">Sí</span>
+                        {% else %}
+                            <span class="badge-no">No</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if alumno[5] == 'No' %}
+                            <a class="btn btn-success" href="/matricular/{{ alumno[0] }}">Matricular</a>
+			{% else %}
+			    <a class="btn btn-primary" href="/pagos/{{ alumno[0] }}">Ver pagos</a>
+
+   			    <a class="btn btn-danger"
+   			       href="/borrar_historial_matricula/{{ alumno[0] }}"
+   			       onclick="return confirm('¿Seguro que deseas borrar todo el historial de matrícula, pagos y boletas de este alumno?')">
+   			       Borrar historial
+			    </a>
+
+			{% endif %}
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td class="vacio" colspan="6">No se encontraron alumnos.</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>

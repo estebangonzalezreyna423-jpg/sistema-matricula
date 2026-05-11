@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Alumnos - Sistema de Matrícula</title>
+
+<link rel="stylesheet" href="/static/style.css">
+
+</head>
+
+<body>
+
+<div class="sidebar">
+    <h2> Matrícula</h2>
+    <a href="/dashboard">Inicio</a>
+    <a href="/alumnos">Gestión de alumnos</a>
+    <a href="/matricula">Matrícula</a>
+    <a href="/deudores">Deudores</a>
+    <a href="/boletas">Historial de boletas</a>
+    <a href="/logout">Cerrar sesión</a>
+</div>
+
+<div class="content">
+
+<div class="card">
+    <h1>Registro de Alumnos</h1>
+
+    <form class="form-registro" method="POST">
+        <input type="text" name="nombres" placeholder="Nombres" required>
+        <input type="text" name="apellidos" placeholder="Apellidos" required>
+        <input type="text" name="dni" placeholder="DNI">
+
+        <select name="grado" required>
+            <option value="">Grado</option>
+            <option value="1">1°</option>
+            <option value="2">2°</option>
+            <option value="3">3°</option>
+            <option value="4">4°</option>
+            <option value="5">5°</option>
+        </select>
+
+        <select name="seccion" required>
+            <option value="">Sección</option>
+            <option value="A">A</option>
+            <option value="B">B</option>
+            <option value="C">C</option>
+        </select>
+
+        <input type="text" name="apoderado" placeholder="Apoderado">
+        <input type="text" name="telefono" placeholder="Teléfono">
+
+        <button class="btn-full" type="submit">Guardar alumno</button>
+    </form>
+</div>
+
+<div class="card">
+    <h2>Lista de alumnos</h2>
+
+    <form class="form-buscar" method="GET">
+        <input type="text" name="buscar" placeholder="Buscar alumno...">
+
+        <select name="grado">
+            <option value="">Grado</option>
+            <option value="1">1°</option>
+            <option value="2">2°</option>
+            <option value="3">3°</option>
+            <option value="4">4°</option>
+            <option value="5">5°</option>
+        </select>
+
+        <select name="seccion">
+            <option value="">Sección</option>
+            <option value="A">A</option>
+            <option value="B">B</option>
+            <option value="C">C</option>
+        </select>
+
+        <button type="submit">Filtrar</button>
+        <a class="btn-limpiar" href="/alumnos">Limpiar</a>
+    </form>
+
+    <div class="table-container">
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Nombres</th>
+            <th>Apellidos</th>
+            <th>DNI</th>
+            <th>Grado</th>
+            <th>Sección</th>
+            <th>Apoderado</th>
+            <th>Teléfono</th>
+            <th>Estado</th>
+            <th>Acción</th>
+        </tr>
+
+        {% for alumno in alumnos %}
+        <tr>
+            <td>{{ alumno[0] }}</td>
+            <td>{{ alumno[1] }}</td>
+            <td>{{ alumno[2] }}</td>
+            <td>{{ alumno[3] }}</td>
+            <td>{{ alumno[4] }}°</td>
+            <td>{{ alumno[5] }}</td>
+            <td>{{ alumno[6] }}</td>
+            <td>{{ alumno[7] }}</td>
+            <td><span class="estado">{{ alumno[8] }}</span></td>
+            <td>
+                <div class="acciones">
+                    <a class="btn-editar" href="/editar_alumno/{{ alumno[0] }}">Editar</a>
+                    <a class="btn-ver" href="/alumno/{{ alumno[0] }}">Ver</a>
+                    <a class="btn-eliminar" href="/eliminar_alumno/{{ alumno[0] }}" onclick="return confirm('¿Seguro que deseas eliminar?')">Eliminar</a>
+                </div>
+            </td>
+        </tr>
+        {% else %}
+        <tr>
+            <td class="vacio" colspan="10">No hay alumnos registrados</td>
+        </tr>
+        {% endfor %}
+    </table>
+    </div>
+
+</div>
+
+</div>
+
+</body>
+</html>

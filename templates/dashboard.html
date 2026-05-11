@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Dashboard - Sistema de Matrícula</title>
+
+<link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+
+<div class="sidebar">
+    <h2>Matrícula</h2>
+    <a href="/dashboard">Inicio</a>
+    <a href="/alumnos">Gestión de alumnos</a>
+    <a href="/matricula">Matrícula</a>
+    <a href="/deudores">Deudores</a>
+    <a href="/boletas">Historial de boletas</a>
+    <a href="/logout">Cerrar sesión</a>
+</div>
+
+<div class="content">
+
+    <div class="header">
+        <h1>Panel principal</h1>
+        <p>Resumen general del sistema de matrícula y pagos escolares.</p>
+    </div>
+
+    <div class="cards">
+
+        <div class="card">
+            <h3>Total recaudado</h3>
+            <div class="numero">S/ {{ total_recaudado }}</div>
+            <p>Dinero registrado en boletas.</p>
+        </div>
+
+        <div class="card">
+            <h3>Total pendiente</h3>
+            <div class="numero">S/ {{ total_pendiente }}</div>
+            <p>Deuda total pendiente.</p>
+        </div>
+
+        <div class="card">
+            <h3>Boletas emitidas</h3>
+            <div class="numero">{{ total_boletas }}</div>
+            <p>Total de boletas registradas.</p>
+        </div>
+
+        <div class="card">
+            <h3>Alumnos deudores</h3>
+            <div class="numero">{{ alumnos_deudores }}</div>
+            <p>Alumnos con pagos pendientes.</p>
+        </div>
+
+        <div class="card">
+            <h3>Alumnos al día</h3>
+            <div class="numero">{{ alumnos_al_dia }}</div>
+            <p>Matriculados sin deudas.</p>
+        </div>
+
+        <div class="card">
+            <h3>Total de alumnos</h3>
+            <div class="numero">{{ total_alumnos }}</div>
+            <p>Alumnos registrados.</p>
+        </div>
+
+        <div class="card">
+            <h3>Alumnos activos</h3>
+            <div class="numero">{{ alumnos_activos }}</div>
+            <p>Estudiantes activos.</p>
+        </div>
+
+        <div class="card">
+            <h3>Matriculados</h3>
+            <div class="numero">{{ total_matriculados }}</div>
+            <p>Alumnos matriculados.</p>
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Historial de boletas</title>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+
+<div class="sidebar">
+    <h2>Matrícula</h2>
+    <a href="/dashboard">Inicio</a>
+    <a href="/alumnos">Gestión de alumnos</a>
+    <a href="/matricula">Matrícula</a>
+    <a href="/deudores">Deudores</a>
+    <a href="/boletas">Historial de boletas</a>
+    <a href="/logout">Cerrar sesión</a>
+</div>
+
+<div class="content">
+
+<h1>Historial de boletas</h1>
+
+<a class="btn-volver" href="/boletas">⬅ Volver</a>
+
+<br><br>
+
+{% if alumno %}
+<p>
+    <strong>Alumno:</strong> {{ alumno[1] }} {{ alumno[2] }} |
+    <strong>Grado:</strong> {{ alumno[3] }}° {{ alumno[4] }}
+</p>
+{% endif %}
+
+<div class="card">
+<div class="table-container">
+
+<table>
+<tr>
+    <th>N° Boleta</th>
+    <th>Concepto</th>
+    <th>Monto</th>
+    <th>Método</th>
+    <th>Fecha pago</th>
+    <th>Fecha confirmación</th>
+    <th>Acción</th>
+</tr>
+
+{% for b in boletas %}
+<tr>
+    <td>{{ b[1] }}</td>
+    <td>{{ b[2] }}</td>
+    <td>S/ {{ b[3] }}</td>
+    <td>{{ b[4] }}</td>
+    <td>{{ b[5] }}</td>
+    <td>{{ b[6] }}</td>
+    <td>
+        <a class="btn btn-primary" href="/boleta/{{ b[0] }}">Ver boleta</a>
+
+        <form method="POST"
+              action="/anular_boleta/{{ b[0] }}"
+              style="display:inline;"
+              onsubmit="return confirm('¿Seguro que deseas anular esta boleta? El monto volverá a deuda pendiente.');">
+            <button type="submit" class="btn btn-danger">
+                Anular
+            </button>
+        </form>
+    </td>
+</tr>
+{% else %}
+<tr>
+    <td class="vacio" colspan="7">Este alumno aún no tiene boletas registradas</td>
+</tr>
+{% endfor %}
+
+</table>
+
+</div>
+</div>
+
+</div>
+
+</body>
+</html>
