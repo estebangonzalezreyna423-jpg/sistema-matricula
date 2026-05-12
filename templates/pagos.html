@@ -25,11 +25,9 @@
 <h1>Pagos de {{ alumno[1] }} {{ alumno[2] }}</h1>
 
 <div style="display:flex; gap:10px; margin-bottom:20px;">
-
     <a class="btn-volver" href="/matricula">
         ⬅ Volver
     </a>
-
 </div>
 
 <div class="resumen">
@@ -70,11 +68,13 @@
         <option value="Pagado" {% if estado == 'Pagado' %}selected{% endif %}>
             Pagado
         </option>
+
+        <option value="Exonerado" {% if estado == 'Exonerado' %}selected{% endif %}>
+            Exonerado
+        </option>
     </select>
 
-    <button type="submit">
-        Buscar
-    </button>
+    <button type="submit">Buscar</button>
 
     <a class="btn-limpiar" href="/pagos/{{ alumno[0] }}">
         Limpiar
@@ -106,6 +106,8 @@
 <td>
 {% if p[3] == 'Pagado' %}
     <span class="badge-pagado">Pagado</span>
+{% elif p[3] == 'Exonerado' %}
+    <span class="badge-exonerado">Exonerado</span>
 {% else %}
     <span class="badge-pendiente">Pendiente</span>
 {% endif %}
@@ -123,7 +125,16 @@
         Registrar pago
     </a>
 
-{% else %}
+    <form method="POST"
+          action="/exonerar_pago/{{ p[0] }}"
+          style="display:inline;"
+          onsubmit="return confirm('¿Seguro que deseas exonerar este pago? Ya no contará como deuda.');">
+        <button type="submit" class="btn btn-primary">
+            Exonerar
+        </button>
+    </form>
+
+{% elif p[3] == 'Pagado' %}
 
     {% if p[5] %}
 
@@ -136,6 +147,10 @@
         <span class="check">✔ Pagado</span>
 
     {% endif %}
+
+{% elif p[3] == 'Exonerado' %}
+
+    <span class="badge-exonerado">Exonerado</span>
 
 {% endif %}
 

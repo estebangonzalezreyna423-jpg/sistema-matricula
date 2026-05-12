@@ -455,3 +455,11 @@ tr:hover td {
         flex-direction: column;
     }
 }
+.badge-exonerado {
+    background: #dbeafe;
+    color: #1e40af;
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-weight: 800;
+    font-size: 13px;
+}

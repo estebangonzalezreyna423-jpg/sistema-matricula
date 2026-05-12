@@ -202,6 +202,9 @@ def dashboard():
     cur.execute("SELECT COUNT(*) FROM pagos WHERE estado='Pagado'")
     pagos_pagados = cur.fetchone()[0]
 
+    cur.execute("SELECT COUNT(*) FROM pagos WHERE estado='Exonerado'")
+    pagos_exonerados = cur.fetchone()[0]
+
     try:
         cur.execute("SELECT SUM(monto_recibido) FROM boletas")
         total_recaudado = cur.fetchone()[0] or 0
@@ -244,6 +247,7 @@ def dashboard():
         total_matriculados=total_matriculados,
         pagos_pendientes=pagos_pendientes,
         pagos_pagados=pagos_pagados,
+        pagos_exonerados=pagos_exonerados,
         total_recaudado=total_recaudado,
         total_pendiente=total_pendiente,
         total_boletas=total_boletas,
@@ -1461,6 +1465,43 @@ def anular_boleta(boleta_id):
     conn.close()
 
     return redirect("/boletas_alumno/" + str(alumno_id))
+
+
+@app.route("/exonerar_pago/<int:pago_id>", methods=["POST"])
+def exonerar_pago(pago_id):
+    if "user" not in session:
+        return redirect("/")
+
+    conn = get_db()
+    cur = conn.cursor()
+
+    cur.execute("""
+        SELECT alumno_id
+        FROM pagos
+        WHERE id=?
+    """, (pago_id,))
+    pago = cur.fetchone()
+
+    if not pago:
+        conn.close()
+        return redirect("/matricula")
+
+    alumno_id = pago[0]
+    fecha = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+    cur.execute("""
+        UPDATE pagos
+        SET monto=0,
+            estado='Exonerado',
+            fecha_pago=?
+        WHERE id=?
+    """, (fecha, pago_id))
+
+    conn.commit()
+    conn.close()
+
+    return redirect("/pagos/" + str(alumno_id))
+
 
 @app.route("/logout")
 def logout():
